@@ -41,8 +41,23 @@ const remove = (key: string): void =>  {
   }
 }
 
+const clearNamespace = (): void => {
+  try {
+    for (let i= localStorage.length - 1; i >= 0; i--) {
+      const key = localStorage.key(i);
+
+      if(key && key.startsWith("libraryQueue:")) {
+        localStorage.removeItem(key);
+      }
+    }
+  } catch (error) {
+      console.error("Storage clearNamespace error", error);
+  }
+}
+
 export const localStorageAdapter = {
   save, 
   load,
-  remove
+  remove,
+  clearNamespace,
 };
