@@ -40,11 +40,20 @@ const addPerson = (
 
 
 // removePerson
-const removePerson = () => {
+const removePerson = (id: string) : QueuePerson[]  => {
+
   // Load queue
-  // Remove by id
+    const queue = localStorageAdapter.load<QueuePerson[]>('queue', [])
+
+  // Remove person by id 
+  const newQueue = queue.filter((person) => person.id !== id);
+
   // Save updated queue
+  localStorageAdapter.save('queue', newQueue);
+
   // Return updated queue
+  return newQueue; 
+
 }
 
 // assignComputer
