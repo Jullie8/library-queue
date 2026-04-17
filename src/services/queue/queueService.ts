@@ -43,7 +43,7 @@ const addPerson = (
 const removePerson = (id: string) : QueuePerson[]  => {
 
   // Load queue
-    const queue = localStorageAdapter.load<QueuePerson[]>('queue', [])
+    const queue = localStorageAdapter.load<QueuePerson[]>('queue', []);
 
   // Remove person by id 
   const newQueue = queue.filter((person) => person.id !== id);
@@ -57,15 +57,33 @@ const removePerson = (id: string) : QueuePerson[]  => {
 }
 
 // assignComputer
-const assignComputer = () => {
-  // Remove person from queue
-  // Create session object
-  // Save session
-  // Return updated state
+const assignComputer = (id: string, computerNumber: number) : QueuePerson[] => {
+  const queue = localStorageAdapter.load<QueuePerson[]>('queue', []);
+
+  if(computerNumber <= 0) {
+    console.warn('Invalid computer number');
+    return queue;
+  }
+
+  // Find the person
+  const personIndex = queue.findIndex((p) => ( p.id === id ));
+  if(personIndex === -1) {
+    console.warn(`Person with id ${id} not found`);
+    return queue;
+  }
+
+  // Update the person 
+  queue[personIndex].computerNumber = computerNumber;
+
+  // Save the updated queue
+  localStorageAdapter.save('queue', queue);
+
+  // Return the updated queue
+  return queue;
 }
 
 export const queueService = {
   addPerson,
   removePerson,
   assignComputer
-}
+};
