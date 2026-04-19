@@ -1,4 +1,5 @@
 import type { QueuePerson } from "../../features/queue/types";
+import { QUEUE_KEY } from "../../features/queue/constants";
 import { localStorageAdapter } from "../storage/localStorageAdapter";
 
 // addPerson
@@ -8,7 +9,7 @@ const addPerson = (
   ): QueuePerson[] => {
   
     // load queue
-  const queue = localStorageAdapter.load<QueuePerson[]>('queue', []);
+  const queue = localStorageAdapter.load<QueuePerson[]>(QUEUE_KEY, []);
   
   // Validate Input
   if (!libraryCardLastFour || libraryCardLastFour.length !== 4) {
@@ -38,18 +39,17 @@ const addPerson = (
   return queue;
 };
 
-
 // removePerson
 const removePerson = (id: string) : QueuePerson[]  => {
 
   // Load queue
-    const queue = localStorageAdapter.load<QueuePerson[]>('queue', []);
+    const queue = localStorageAdapter.load<QueuePerson[]>(QUEUE_KEY, []);
 
   // Remove person by id 
   const newQueue = queue.filter((person) => person.id !== id);
 
   // Save updated queue
-  localStorageAdapter.save('queue', newQueue);
+  localStorageAdapter.save(QUEUE_KEY, newQueue);
 
   // Return updated queue
   return newQueue; 
@@ -58,7 +58,7 @@ const removePerson = (id: string) : QueuePerson[]  => {
 
 // assignComputer
 const assignComputer = (id: string, computerNumber: number) : QueuePerson[] => {
-  const queue = localStorageAdapter.load<QueuePerson[]>('queue', []);
+  const queue = localStorageAdapter.load<QueuePerson[]>(QUEUE_KEY, []);
 
   if(computerNumber <= 0) {
     console.warn('Invalid computer number');
@@ -76,14 +76,21 @@ const assignComputer = (id: string, computerNumber: number) : QueuePerson[] => {
   queue[personIndex].computerNumber = computerNumber;
 
   // Save the updated queue
-  localStorageAdapter.save('queue', queue);
+  localStorageAdapter.save(QUEUE_KEY, queue);
 
   // Return the updated queue
+  return queue;
+}
+
+const getQueue = () => {
+  const queue = localStorageAdapter.load<QueuePerson[]>(QUEUE_KEY, []);
+
   return queue;
 }
 
 export const queueService = {
   addPerson,
   removePerson,
-  assignComputer
+  assignComputer,
+  getQueue,
 };
