@@ -1,0 +1,1 @@
+export const QUEUE_KEY = 'queue';
