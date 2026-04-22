@@ -14,7 +14,7 @@ import { queueService } from "../queue/queueService"
   });
  }
 
- const addPerson = (libraryCardLastFour: string, name: string) : Promise<QueuePerson []> => {
+ const addPerson = (libraryCardLastFour: string, name: string) : Promise<QueuePerson[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       const queue = queueService.addPerson(
