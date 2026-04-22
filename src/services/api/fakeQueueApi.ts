@@ -11,5 +11,22 @@ import { queueService } from "../queue/queueService"
       const queue = queueService.getQueue();
       resolve(queue);
     }, 300);
-  })
+  });
  }
+
+ const addPerson = (libraryCardLastFour: string, name: string) : Promise<QueuePerson []> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const queue = queueService.addPerson(
+        libraryCardLastFour, 
+        name
+      );
+      resolve(queue);
+    }, 300);
+  });
+ }
+
+export const fakeQueueApi = {
+  getQueue,
+  addPerson,
+}
