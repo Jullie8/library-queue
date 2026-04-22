@@ -1,5 +1,6 @@
 import type { QueuePerson } from "../../features/queue/types";
 import { queueService } from "../queue/queueService"
+import { API_DELAY } from "./config";
 
 const getQueue = () : Promise<QueuePerson[]> => {
   // return a promise
@@ -8,7 +9,7 @@ const getQueue = () : Promise<QueuePerson[]> => {
     setTimeout(() => {
       const queue = queueService.getQueue();
       resolve(queue);
-    }, 300);
+    }, API_DELAY);
   });
 }
 
@@ -20,7 +21,7 @@ const addPerson = (libraryCardLastFour: string, name: string) : Promise<QueuePer
         name
       );
       resolve(queue);
-    }, 300);
+    }, API_DELAY);
   });
 }
 
@@ -30,7 +31,7 @@ const removePerson = (id: string) : Promise<QueuePerson[]> => {
     setTimeout(() => {
       const queue = queueService.removePerson(id);
       resolve(queue);
-    }, 300);
+    }, API_DELAY);
   });
 }
 
@@ -39,7 +40,7 @@ const assignComputer = (id: string, computerNumber: number) : Promise<QueuePerso
     setTimeout(() => {
       const queue = queueService.assignComputer(id, computerNumber);
       resolve(queue);
-    }, 300);
+    }, API_DELAY);
   });
 }
 
