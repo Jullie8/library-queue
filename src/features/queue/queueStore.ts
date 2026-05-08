@@ -12,6 +12,9 @@ type State = {
 
 type QueueActions = {
     fetchQueue: () => Promise<void>;
+    addPerson: (libraryCardLastFour: string, name: string) => Promise<void>;
+    removePerson: (id: string) => Promise<void>;
+    assignComputer: (id: string, computerNumber: number) => Promise<void>;
 };
 
 const useQueueStore = create<State>((set) => {
@@ -21,14 +24,48 @@ const useQueueStore = create<State>((set) => {
     error: null,
     actions: {
       fetchQueue: async () => {
-        set({ isLoading: true, error: null });
+        set({isLoading: true, error: null});
         try {
           const data  = await fakeQueueApi.getQueue();
-          set({ queue: data });
+          set({queue: data});
         } catch {
-          set({ error: "Failed to fetch" })
+          set({error: "Failed to fetch"})
         } finally {
-            set({ isLoading: false });
+            set({isLoading: false});
+        }
+      },
+      addPerson: async (libraryCardLastFour: string, name: string) => {
+        set ({isLoading: true, error: null})
+        try {
+        const data = await fakeQueueApi.addPerson(libraryCardLastFour, name);
+
+        set({queue: data});
+        } catch {
+            set({error: "Failed to add person"});
+        } finally {
+            set({isLoading: false}); 
+        }
+      },
+      removePerson: async (id: string) => {
+        set({isLoading: true, error: null});
+        try {
+          const data = await fakeQueueApi.removePerson(id);
+          set({queue: data});
+        } catch {
+          set({error: "Failed to remove person"});
+        } finally {
+          set({isLoading: false});
+        }
+      },
+      assignComputer: async (id: string, computerNumber: number) => {
+        set({isLoading: true, error: null});
+        try {
+          const data = await fakeQueueApi.assignComputer(id, computerNumber);
+          set({queue: data});
+        } catch {
+          set ({error: "Failed to assign a computer"});
+        } finally {
+          set ({isLoading: false})
         }
       }
     }
@@ -39,7 +76,7 @@ const useQueueStore = create<State>((set) => {
 export const useQueue = () => useQueueStore((state) => state.queue);
 export const useQueueLoading = () => useQueueStore((state) => state.isLoading);
 
-
 // one selector for all our actions
 export const useQueueActions = () => useQueueStore((state) => state.actions);
+export const useQueueError = () => useQueueStore((state) => state.error)
 
